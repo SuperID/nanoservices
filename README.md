@@ -88,10 +88,10 @@ interface Context {
   debug(msg: Any);
 
   // 调用其他服务，并传递 requestId
-  call(name: String, callback: Function);
+  call(name: String, params: Object, callback: Function);
 
   // 调用服务器，并传递 requestId，该调用的结果作为当前服务的执行结果返回
-  next(name: String);
+  next(name: String, params: Object);
 
   // 顺序调用一系列的服务，上一个调用的结果作为下一个调用的参数，如果中途出错则直接返回
   series(calls: [CallService], callback: Function);
