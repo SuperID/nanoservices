@@ -5,7 +5,9 @@ const {globalManager, register, call} = require('../');
 register('divide', function (ctx) {
   const a = Number(ctx.params.a);
   const b = Number(ctx.params.b);
-  ctx.result(a / b);
+  setTimeout(() => {
+    ctx.result(a / b);
+  }, Math.random() * 100);
 });
 
 register('add', function (ctx) {
@@ -17,7 +19,9 @@ register('add', function (ctx) {
   const b = Number(ctx.params.b);
 
   // 返回结果
-  ctx.result(a + b);
+  setTimeout(() => {
+    ctx.result(a + b);
+  }, Math.random() * 100);
 });
 
 register('hello', function (ctx) {

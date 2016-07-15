@@ -75,6 +75,12 @@ interface Context {
   // 调用开始时间
   startTime: Date;
 
+  // 执行结束时间
+  stopTime: Date;
+
+  // 耗时（毫秒）
+  spent: Number;
+
   // 参数对象，该对象已被冻结，不能在对象上做修改
   params: Object;
 
