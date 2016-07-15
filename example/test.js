@@ -7,7 +7,7 @@ register('divide', function (ctx) {
   const b = Number(ctx.params.b);
   setTimeout(() => {
     ctx.result(a / b);
-  }, Math.random() * 100);
+  }, Math.random() * 10);
 });
 
 register('add', function (ctx) {
@@ -21,7 +21,7 @@ register('add', function (ctx) {
   // 返回结果
   setTimeout(() => {
     ctx.result(a + b);
-  }, Math.random() * 100);
+  }, Math.random() * 10);
 });
 
 register('hello', function (ctx) {
@@ -37,10 +37,43 @@ register('hello', function (ctx) {
   })
 });
 
+register('series', function (ctx) {
+  ctx.series([
+    ctx.prepareCall('echo', "I am first"),
+    ctx.prepareCall('echo'),
+    ctx.prepareCall('echo', "I am thrid"),
+    ctx.prepareCall('echo'),
+    ctx.prepareCall('echo'),
+    ctx.prepareCall('echo'),
+    ctx.prepareCall('echo'),
+  ], (err, ret) => {
+    if (err) {
+      ctx.error(err);
+    } else {
+      ctx.result(ret);
+    }
+  })
+});
+
+register('echo', function (ctx) {
+  setTimeout(() => {
+    console.log('echo: %s', ctx.params);
+    ctx.result(ctx.params + '+');
+  }, Math.random() * 10);
+});
+
 call('hello', {}, (err, ret) => {
   if (err) {
     console.error(err);
   } else {
     console.log('result=%j', ret);
+  }
+});
+
+call('series', {}, (err, ret) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log(ret);
   }
 });
