@@ -1,6 +1,15 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const {globalManager, register, call} = require('../');
+
+const logStream = fs.createWriteStream(path.resolve(__dirname, 'call.log'), {
+  flags: 'a',
+});
+globalManager.setOption('writeLog', str => {
+  logStream.write(str + '\n');
+});
 
 register('divide', function (ctx) {
   const a = Number(ctx.params.a);
