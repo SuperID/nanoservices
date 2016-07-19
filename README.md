@@ -70,7 +70,7 @@ services.call('add', {a: 123, b: 456}, (err, ret) => {
 interface Context {
 
   // 请求ID
-  requestId: String;
+  requestId: string;
 
   // 调用开始时间
   startTime: Date;
@@ -79,32 +79,32 @@ interface Context {
   stopTime: Date;
 
   // 耗时（毫秒）
-  spent: Number;
+  spent: number;
 
   // 参数对象，该对象已被冻结，不能在对象上做修改
   params: Object;
 
   // 返回执行结果
-  result(ret: Any);
+  result(ret: any);
 
   // 返回执行出错
-  error(err: Any);
+  error(err: any);
 
   // 打印调试信息，支持 debug('msg=%s', msg) 这样的格式
-  debug(msg: Any);
+  debug(msg: any);
 
   // 调用其他服务，并传递 requestId
-  call(name: String, params: Object, callback: Function);
+  call(name: string, params: Object, callback: (err, ret) => void);
 
   // 调用服务器，并传递 requestId，该调用的结果作为当前服务的执行结果返回
-  next(name: String, params: Object);
+  next(name: string, params: Object);
 
   // 顺序调用一系列的服务，上一个调用的结果作为下一个调用的参数，如果中途出错则直接返回
-  series(calls: [CallService], callback: Function);
+  series(calls: [CallService], callback: (err, ret) => void);
 
   // 返回一个 CallService 对象，与 series() 结合使用
   // params 表示绑定的参数，如果补指定，则使用上一个调用的结果
-  prepareCall(name: String, params?: Object);
+  prepareCall(name: string, params?: Object);
 
 }
 ```
