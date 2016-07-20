@@ -2,9 +2,13 @@
 
 const fs = require('fs');
 const path = require('path');
-const {globalManager, register, call} = require('../');
+const microservices = require('../');
+const globalManager = microservices.globalManager;
+const register = microservices.register;
+const call = microservices.call;
+const utils = microservices.utils;
 
-const logStream = fs.createWriteStream(path.resolve(__dirname, 'call.log'), {
+const logStream = fs.createWriteStream(path.resolve(__dirname, `call-${utils.date('Y-m-d')}.log`), {
   flags: 'a',
 });
 globalManager.setOption('writeLog', str => {
