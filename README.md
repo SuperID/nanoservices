@@ -94,13 +94,13 @@ interface Context {
   debug(msg: any);
 
   // 调用其他服务，并传递 requestId
-  call(name: string, params: Object, callback: (err, ret) => void);
+  call(name: string, params: Object, callback: (err, ret) => void): Promise;
 
   // 调用服务器，并传递 requestId，该调用的结果作为当前服务的执行结果返回
   next(name: string, params: Object);
 
   // 顺序调用一系列的服务，上一个调用的结果作为下一个调用的参数，如果中途出错则直接返回
-  series(calls: [CallService], callback: (err, ret) => void);
+  series(calls: [CallService], callback: (err, ret) => void): Promise;
 
   // 返回一个 CallService 对象，与 series() 结合使用
   // params 表示绑定的参数，如果补指定，则使用上一个调用的结果
