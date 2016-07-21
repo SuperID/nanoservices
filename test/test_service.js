@@ -14,16 +14,16 @@ describe('Service', function () {
   describe('new Service(name, handler)', function () {
 
     it('name 参数不正确报错', function () {
-      assert.throws(function () {
+      assert.throws(() => {
         new Service(123, function (ctx) {});
       }, /AssertionError/);
     });
 
     it('handler 参数不正确报错', function () {
-      assert.throws(function () {
+      assert.throws(() => {
         new Service('test', 123);
       }, /AssertionError/);
-      assert.throws(function () {
+      assert.throws(() => {
         new Service('test', function () {});
       }, /AssertionError/);
     });
@@ -43,7 +43,7 @@ describe('Service', function () {
     it('必须异步执行', function (done) {
       const ctx = {
         started: false,
-        done: ret => {
+        result: ret => {
           assert.equal(ret, 123456);
           assert.equal(ctx.started, true);
           done();
@@ -51,7 +51,7 @@ describe('Service', function () {
       };
       const s = new Service('test', function (ctx) {
         ctx.started = true;
-        ctx.done(123456);
+        ctx.result(123456);
       });
       s.call(ctx);
       // service handler 还未执行
