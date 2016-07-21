@@ -1,7 +1,6 @@
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
-[![Gittip][gittip-image]][gittip-url]
 [![David deps][david-image]][david-url]
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
@@ -12,8 +11,6 @@
 [travis-url]: https://travis-ci.org/SuperID/super-microservices
 [coveralls-image]: https://img.shields.io/coveralls/SuperID/super-microservices.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/SuperID/super-microservices?branch=master
-[gittip-image]: https://img.shields.io/gittip/leizongmin.svg?style=flat-square
-[gittip-url]: https://www.gittip.com/leizongmin/
 [david-image]: https://img.shields.io/david/SuperID/super-microservices.svg?style=flat-square
 [david-url]: https://david-dm.org/SuperID/super-microservices
 [node-image]: https://img.shields.io/badge/node.js-%3E=_4.0-green.svg?style=flat-square
