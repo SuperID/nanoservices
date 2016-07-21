@@ -4,7 +4,8 @@
   "description": "基于Node.js的微服务框架",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -t 10000"
+    "test": "mocha -t 10000",
+    "test-cov": "istanbul cover _mocha --report lcovonly -- -t 10000 -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,8 @@
     "lei-utils": "^2.1.0"
   },
   "devDependencies": {
+    "coveralls": "^2.11.11",
+    "istanbul": "^0.4.4",
     "mocha": "^2.5.3"
   }
 }
