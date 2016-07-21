@@ -100,7 +100,7 @@ function prettyPrint(data, level) {
       case 'call': {
         const info = JSON.parse(log.content);
         if (info.service) {
-          console.log(indent + clc.yellow(`${clc.bold(info.service)}(${JSON.stringify(info.params)})`) + '  ' + clc.magenta(`[${data.id}]`));
+          console.log(indent + clc.blue(`${clc.bold(info.service)}(${JSON.stringify(info.params)})`) + '  ' + clc.magenta(`[${data.id}]`));
         }
         break;
       }
@@ -114,7 +114,7 @@ function prettyPrint(data, level) {
         console.log(indent + clc.magenta(`  - debug: ${log.content}`));
         break;
       case 'log':
-        console.log(indent + clc.blue(`  - log: ${log.content}`));
+        console.log(indent + clc.yellow(`  - log: ${log.content}`));
         break;
       default:
         console.log(indent + clc.yellow(`  - ${log.type}: ${log.content}`));
