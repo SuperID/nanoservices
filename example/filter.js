@@ -93,7 +93,8 @@ function mutedColor(content) {
 }
 
 function printLog(log) {
-  const indent = microservices.utils.takeChars(' ', getRequestLevel(log.id) * 4);
+  // const indent = microservices.utils.takeChars(' ', getRequestLevel(log.id) * 2);
+  const indent = ' ';
   console.log(log.time + indent + mutedColor(log.id) + typeColor(log.type, ` ${clc.bold(log.type)} ${log.content}`));
 }
 
