@@ -11,6 +11,7 @@ const Manager = exports.Manager = require('./lib/manager');
 const Service = exports.Service = require('./lib/service');
 const utils = exports.utils = require('./lib/utils');
 const error = exports.error = require('./lib/error');
+const LogFilter = exports.LogFilter = require('./lib/log');
 
 const globalManager = new Manager();
 

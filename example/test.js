@@ -111,9 +111,11 @@ register('face.upload', function (ctx) {
 
 
 const ctx = globalManager.newContext();
-ctx.call('api.superid.signup', {phone: 123456, face: utils.randomString(20) + '.jpg'})
-  .then(ret => console.log('ok', ret))
-  .catch(err => console.log('fail', err));
-ctx.call('api.superid.signup', {phone: 123456, face: utils.randomString(20) + '.jpg'})
-  .then(ret => console.log('ok', ret))
-  .catch(err => console.log('fail', err));
+setInterval(() => {
+  ctx.call('api.superid.signup', {phone: 123456, face: utils.randomString(20) + '.jpg'})
+    .then(ret => console.log('ok', ret))
+    .catch(err => console.log('fail', err));
+  ctx.call('api.superid.signup', {phone: 123456, face: utils.randomString(20) + '.jpg'})
+    .then(ret => console.log('ok', ret))
+    .catch(err => console.log('fail', err));
+}, 1000);
