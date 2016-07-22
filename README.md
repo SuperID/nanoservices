@@ -38,6 +38,8 @@ $ npm install super-microservices --save
 + [x] 自动记录日志，结合相应的调试信息方便开发调试
 + [ ] 考虑接驳`clouds`系统，可以使得不同主机/进程间的调用也适用
 
+![](screenshots.png);
+
 
 ## 使用方法
 
