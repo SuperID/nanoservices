@@ -4,45 +4,12 @@ const fs = require('fs');
 const path = require('path');
 const readLine = require('lei-stream').readLine;
 const clc = require('cli-color');
-
-function whitespaceSeparatedBlocks(str, num) {
-  const blocks = [];
-  let i = 0;
-  while (blocks.length < num - 1) {
-    const j = str.indexOf(' ', i);
-    if (j === -1) {
-      blocks.push(str.slice(i).trim());
-      i = str.length;
-      break;
-    } else {
-      blocks.push(str.slice(i, j).trim());
-      i = j + 1;
-    }
-  }
-  if (i < str.length) {
-    blocks.push(str.slice(i).trim());
-  }
-  return blocks;
-}
-
-function getParentId(id) {
-  const i = id.lastIndexOf(':');
-  if (i === -1) return;
-  return id.slice(0, i);
-}
-
-function takeSpaces(num) {
-  let str = '';
-  for (let i = 0; i < num; i++) {
-    str += ' ';
-  }
-  return str;
-}
+const utils = require('../lib/utils');
 
 function main() {
   const requestIdMap = {};
   readLine(path.resolve(__dirname, process.argv[2])).go((data, next) => {
-    const blocks = whitespaceSeparatedBlocks(data, 5);
+    const blocks = utils.whitespaceSeparatedBlocks(data, 5);
     const date = blocks[0];
     const time = blocks[1];
     const id = blocks[2].slice(1, -1);
@@ -58,7 +25,7 @@ function main() {
 
     let requestIds = Object.keys(requestIdMap).sort();
     if (!process.argv[3]) {
-      console.log(requestIds.filter(id => !getParentId(id)).join('\n'));
+      console.log(requestIds.filter(id => !utils.getParentRequestId(id)).join('\n'));
       return;
     }
 
@@ -77,7 +44,7 @@ function main() {
       map[id] = getRequestIdInfo(id);
     });
     requestIds.forEach(id => {
-      const parentId = getParentId(id);
+      const parentId = utils.getParentRequestId(id);
       if (parentId) {
         map[parentId].call.push(map[id]);
       }
@@ -93,7 +60,7 @@ function main() {
 }
 
 function prettyPrint(data, level) {
-  const indent = takeSpaces(level * 4);
+  const indent = utils.takeChars(' ', level * 4);
   // console.log(indent + clc.magenta(`id: ${data.id}`));
   data.log.forEach(log => {
     switch (log.type) {
