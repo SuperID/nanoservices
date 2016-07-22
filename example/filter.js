@@ -2,42 +2,72 @@
 
 const fs = require('fs');
 const path = require('path');
+const stream = require('stream');
 const clc = require('cli-color');
+const readLine = require('lei-stream').readLine;
 const microservices = require('../');
 
-function tailf(filename, delay, callback) {
 
-  const fd = fs.openSync(filename, 'r');
-  const CHUNK_SIZE = 64 * 1024;
+class TailStream extends stream.Readable {
 
-  let position = 0;
-  let lastBuf = new Buffer(0);
-
-  function next() {
-
-    const buf = new Buffer(CHUNK_SIZE);
-    const bytesRead = fs.readSync(fd, buf, 0, CHUNK_SIZE, position);
-
-    position += bytesRead;
-    const readBuf = Buffer.concat([lastBuf, buf.slice(0, bytesRead)]);
-    let lastIndex = 0;
-    for (let i = 0; i < readBuf.length; i++) {
-      if (readBuf[i] === 10) {
-        callback(readBuf.slice(lastIndex, i).toString().trim());
-        lastIndex = i;
-      }
-    }
-    lastBuf = readBuf.slice(lastIndex);
-
-    if (bytesRead < CHUNK_SIZE) {
-      setTimeout(next, delay);
-    } else {
-      next();
-    }
-
+  /**
+   * TailStream
+   *
+   * @param {Object} options
+   *   - {String} file
+   *   - {Number} delay defaults=100
+   */
+  constructor(options) {
+    options = options || {};
+    super(options);
+    this._file = options.file;
+    this._delay = options.delay || 100;
+    this._position = 0;
+    this._fd = fs.openSync(this._file, 'r');
+    this._delayId = null;
+    this._reading = false;
   }
-  next();
+
+  _getHighWaterMark() {
+    return this._readableState.highWaterMark;
+  }
+
+  _read(size) {
+    if (this._reading) return;
+    this._reading = true;
+    fs.read(this._fd, new Buffer(size), 0, size, this._position, (err, bytesRead, buf) => {
+      this._reading = false;
+      if (err) {
+        process.nextTick(() => this.emit('error', err));
+        return;
+      }
+      if (bytesRead > 0) {
+        this._position += bytesRead;
+        this.push(buf.slice(0, bytesRead));
+      } else {
+        this._delayId = setTimeout(() => this._read(size), this._delay);
+      }
+    });
+  }
+
+  pause() {
+    super.pause();
+    clearTimeout(this._delayId);
+    this._delayId = setTimeout(() => this._read(this._getHighWaterMark()), 0x7FFFFFFF);
+  }
+
+  resume() {
+    super.resume();
+    this._read(this._getHighWaterMark());
+  }
+
+  close() {
+    clearTimeout(this._delayId);
+    this.push(null);
+  }
+
 }
+
 
 function getRequestLevel(id) {
   return id.split(':').length;
@@ -68,12 +98,19 @@ function printLog(log) {
 }
 
 function main() {
+
   const filter = new microservices.LogFilter({
     requestId: process.argv[3],
   });
   filter.on('log', printLog);
-  tailf(path.resolve(__dirname, process.argv[2]), 100, line => {
+
+  const stream = new TailStream({
+    file: path.resolve(__dirname, process.argv[2]),
+    delay: 100,
+  });
+  readLine(stream).go((line, next) => {
     filter.writeLine(line);
+    next();
   });
 }
 
