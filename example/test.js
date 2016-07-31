@@ -5,10 +5,9 @@ const path = require('path');
 const microservices = require('../');
 const globalManager = microservices.globalManager;
 const register = microservices.register;
-const call = microservices.call;
 const utils = microservices.utils;
 
-const logStream = fs.createWriteStream(path.resolve(__dirname, `call-${utils.date('Y-m-d')}.log`), {
+const logStream = fs.createWriteStream(path.resolve(__dirname, `call-${ utils.date('Y-m-d') }.log`), {
   flags: 'a',
 });
 globalManager.setOption('writeLog', str => {
@@ -28,15 +27,15 @@ function randomBoolean() {
 // 注册新用户
 register('api.superid.signup', function (ctx) {
   ctx.debug('start signup new user, phone=%s', ctx.params.phone);
-  ctx.call('user.getOrCreate', {phone: ctx.params.phone}, (err, user) => {
+  ctx.call('user.getOrCreate', { phone: ctx.params.phone }, (err, user) => {
     if (err) return ctx.error(err);
 
     ctx.debug('user id=%s', user.id);
-    ctx.call('face.compare', {user, face: ctx.params.face}, (err, compareResult) => {
+    ctx.call('face.compare', { user, face: ctx.params.face }, (err, compareResult) => {
       if (err) return ctx.error(err);
 
       ctx.debug('cool, the last step, generate new access token');
-      ctx.call('user.generateNewAccessToken', {user}, (err, token) => {
+      ctx.call('user.generateNewAccessToken', { user }, (err, token) => {
         if (err) return ctx.error(err);
 
         ctx.result({
@@ -89,7 +88,8 @@ register('user.generateNewAccessToken', function (ctx) {
 
 register('face.compare', function (ctx) {
   ctx.debug('upload image firstly, it may take a minute');
-  ctx.call('face.upload', {face: ctx.params.face}, (err, face) => {
+  ctx.call('face.upload', { face: ctx.params.face }, (err, face) => {
+    if (err) console.error(err);
     if (randomBoolean()) {
       ctx.result({
         uuid: face.uuid,
@@ -112,10 +112,10 @@ register('face.upload', function (ctx) {
 
 const ctx = globalManager.newContext();
 setInterval(() => {
-  ctx.call('api.superid.signup', {phone: 123456, face: utils.randomString(20) + '.jpg'})
+  ctx.call('api.superid.signup', { phone: 123456, face: utils.randomString(20) + '.jpg' })
     .then(ret => console.log('ok', ret))
     .catch(err => console.log('fail', err));
-  ctx.call('api.superid.signup', {phone: 123456, face: utils.randomString(20) + '.jpg'})
+  ctx.call('api.superid.signup', { phone: 123456, face: utils.randomString(20) + '.jpg' })
     .then(ret => console.log('ok', ret))
     .catch(err => console.log('fail', err));
 }, 1000);

@@ -14,64 +14,81 @@ class TailStream extends stream.Readable {
    * TailStream
    *
    * @param {Object} options
-   *   - {String} file
-   *   - {Number} delay defaults=100
+   *   - {String} file 文件名
    */
   constructor(options) {
-    options = options || {};
-    super(options);
-    this._file = options.file;
-    this._delay = options.delay || 100;
-    this._position = 0;
-    this._fd = fs.openSync(this._file, 'r');
-    this._delayId = null;
-    this._reading = false;
+    const opts = options || {};
+    // 调用基类的构造函数
+    super(opts);
+    // 文件名
+    this._file = opts.file;
+    // 标记是否准备就绪
+    this._ready = false;
+    // 开始打开文件
+    this._openFile();
   }
 
-  _getHighWaterMark() {
-    return this._readableState.highWaterMark;
+  // 打开文件
+  _openFile() {
+    fs.open(this._file, 'r', (err, fd) => {
+      if (err) return this.emit('error', err);
+      this._fd = fd;
+      this._watchFile();
+      this._ready = true;
+      this._tryRead();
+    });
   }
 
-  _read(size) {
-    if (this._reading) return;
-    this._reading = true;
-    fs.read(this._fd, new Buffer(size), 0, size, this._position, (err, bytesRead, buf) => {
-      this._reading = false;
-      if (err) {
-        process.nextTick(() => this.emit('error', err));
-        return;
-      }
-      if (bytesRead > 0) {
-        this._position += bytesRead;
-        this.push(buf.slice(0, bytesRead));
-      } else {
-        this._delayId = setTimeout(() => this._read(size), this._delay);
+  // 监听文件内容变化
+  _watchFile() {
+    this._watcher = fs.watch(this._file, (event, _filename) => {
+      if (event === 'change') {
+        this._tryRead();
       }
     });
   }
 
-  pause() {
-    super.pause();
-    clearTimeout(this._delayId);
-    this._delayId = setTimeout(() => this._read(this._getHighWaterMark()), 0x7FFFFFFF);
+  // 获取每次合适的读取字节数
+  _getHighWaterMark() {
+    return this._readableState.highWaterMark;
   }
 
-  resume() {
-    super.resume();
+  // 尝试读取数据
+  _tryRead() {
     this._read(this._getHighWaterMark());
   }
 
+  // 读取数据
+  _read(size) {
+    if (this._ready) {
+      this._ready = false;
+      fs.read(this._fd, new Buffer(size), 0, size, this._position,
+      (err, bytesRead, buf) => {
+        this._ready = true;
+        if (err) return this.emit('error', err);
+        if (bytesRead > 0) {
+          // 将数据推送到队列
+          this._position += bytesRead;
+          this.push(buf.slice(0, bytesRead));
+        }
+      });
+    }
+  }
+
+  // 关闭
   close() {
-    clearTimeout(this._delayId);
-    this.push(null);
+    this._watcher.close();
+    fs.close(this._fd, err => {
+      if (err) return this.emit('error', err);
+    });
   }
 
 }
 
 
-function getRequestLevel(id) {
-  return id.split(':').length;
-}
+// function getRequestLevel(id) {
+//   return id.split(':').length;
+// }
 
 const typeColorMap = {
   call: 'yellow',
@@ -95,7 +112,7 @@ function mutedColor(content) {
 function printLog(log) {
   // const indent = microservices.utils.takeChars(' ', getRequestLevel(log.id) * 2);
   const indent = ' ';
-  console.log(log.time + indent + mutedColor(log.id) + typeColor(log.type, ` ${clc.bold(log.type)} ${log.content}`));
+  console.log(log.time + indent + mutedColor(log.id) + typeColor(log.type, ` ${ clc.bold(log.type) } ${ log.content }`));
 }
 
 function main() {

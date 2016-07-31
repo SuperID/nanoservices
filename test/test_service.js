@@ -15,7 +15,7 @@ describe('Service', function () {
 
     it('name 参数不正确报错', function () {
       assert.throws(() => {
-        new Service(123, function (ctx) {});
+        new Service(123, function (_) {});
       }, /AssertionError/);
     });
 
@@ -30,7 +30,7 @@ describe('Service', function () {
 
     it('正确存储了 name 和 handler', function () {
       const name = 'test';
-      const handler = function (ctx) {};
+      const handler = function (_) {};
       const s = new Service(name, handler);
       assert.equal(s.name, name);
       assert.equal(s.handler, handler);
@@ -50,6 +50,7 @@ describe('Service', function () {
         },
       };
       const s = new Service('test', function (ctx) {
+        // eslint-disable-next-line
         ctx.started = true;
         ctx.result(123456);
       });
@@ -65,7 +66,7 @@ describe('Service', function () {
           done();
         },
       };
-      const s = new Service('test', function (ctx) {
+      const s = new Service('test', function (_) {
         throw new Error('must catch this error');
       });
       s.call(ctx);

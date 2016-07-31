@@ -1,6 +1,5 @@
 'use strict';
 
-const fs = require('fs');
 const path = require('path');
 const readLine = require('lei-stream').readLine;
 const clc = require('cli-color');
@@ -18,7 +17,7 @@ function main() {
     if (!Array.isArray(requestIdMap[id])) {
       requestIdMap[id] = [];
     }
-    requestIdMap[id].push({date, time, id, type, content});
+    requestIdMap[id].push({ date, time, id, type, content });
     next();
   }, function (err) {
     if (err) throw err;
@@ -64,32 +63,32 @@ function prettyPrint(data, level) {
   // console.log(indent + clc.magenta(`id: ${data.id}`));
   data.log.forEach(log => {
     switch (log.type) {
-      case 'call': {
-        const info = JSON.parse(log.content);
-        if (info.service) {
-          console.log(indent + clc.blue(`${clc.bold(info.service)}(${JSON.stringify(info.params)})`));
-        }
-        break;
+    case 'call': {
+      const info = JSON.parse(log.content);
+      if (info.service) {
+        console.log(indent + clc.blue(`${ clc.bold(info.service) }(${ JSON.stringify(info.params) })`));
       }
-      case 'result': {
-        const info = JSON.parse(log.content);
-        console.log(indent + clc.magenta(`  - [${info.spent}ms] `) + clc.bold(clc.green(`result: ${JSON.stringify(info.result)}`)));
-        break;
-      }
-      case 'error': {
-        const info = JSON.parse(log.content);
-        console.log(indent + clc.magenta(`  - [${info.spent}ms] `) + clc.red(`error: ${JSON.stringify(info.error)}`));
-        break;
-      }
-      case 'debug':
-        console.log(indent + clc.magenta(`  - debug: ${log.content}`));
-        break;
-      case 'log':
-        console.log(indent + clc.yellow(`  - log: ${log.content}`));
-        break;
-      default:
-        console.log(indent + clc.yellow(`  - ${log.type}: ${log.content}`));
-        break;
+      break;
+    }
+    case 'result': {
+      const info = JSON.parse(log.content);
+      console.log(indent + clc.magenta(`  - [${ info.spent }ms] `) + clc.bold(clc.green(`result: ${ JSON.stringify(info.result) }`)));
+      break;
+    }
+    case 'error': {
+      const info = JSON.parse(log.content);
+      console.log(indent + clc.magenta(`  - [${ info.spent }ms] `) + clc.red(`error: ${ JSON.stringify(info.error) }`));
+      break;
+    }
+    case 'debug':
+      console.log(indent + clc.magenta(`  - debug: ${ log.content }`));
+      break;
+    case 'log':
+      console.log(indent + clc.yellow(`  - log: ${ log.content }`));
+      break;
+    default:
+      console.log(indent + clc.yellow(`  - ${ log.type }: ${ log.content }`));
+      break;
     }
   });
   data.call.forEach(info => {
