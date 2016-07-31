@@ -6,12 +6,12 @@
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
 
-const Context = exports.Context = require('./lib/context');
+exports.Context = require('./lib/context');
 const Manager = exports.Manager = require('./lib/manager');
-const Service = exports.Service = require('./lib/service');
-const utils = exports.utils = require('./lib/utils');
-const error = exports.error = require('./lib/error');
-const LogFilter = exports.LogFilter = require('./lib/log');
+exports.Service = require('./lib/service');
+exports.utils = require('./lib/utils');
+exports.error = require('./lib/error');
+exports.LogFilter = require('./lib/log_filter');
 
 const globalManager = new Manager();
 
