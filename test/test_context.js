@@ -9,6 +9,7 @@
 const assert = require('assert');
 const Context = require('../lib/context');
 const Manager = require('../lib/manager');
+const StreamRecorder = require('../lib/log_recorder/stream');
 
 describe('Context', function () {
 
@@ -67,11 +68,11 @@ describe('Context', function () {
       new Context({ manager, callback() {} });
     });
 
-    it('writeLog - 如果指定了，必须为一个函数', function () {
+    it('logRecorder - 如果指定了，必须一个有效的LogRecorder', function () {
       assert.throws(() => {
-        new Context({ manager, writeLog: 123 });
+        new Context({ manager, logRecorder: 123 });
       });
-      new Context({ manager, writeLog() {} });
+      new Context({ manager, logRecorder: new StreamRecorder({ write() {} }) });
     });
 
   });

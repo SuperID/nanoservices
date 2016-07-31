@@ -8,6 +8,7 @@
 
 const assert = require('assert');
 const Manager = require('../lib/manager');
+const StreamRecorder = require('../lib/log_recorder/stream');
 
 describe('Manager', function () {
 
@@ -22,12 +23,12 @@ describe('Manager', function () {
       });
     });
 
-    it('writeLog - 必须是一个函数', function () {
+    it('logRecorder - 必须是一个LogRecorder', function () {
       assert.throws(() => {
-        new Manager({ writeLog: 1 });
+        new Manager({ logRecorder: 1 });
       });
       new Manager({
-        writeLog() {},
+        logRecorder: new StreamRecorder({ write() {} }),
       });
     });
 
@@ -46,40 +47,40 @@ describe('Manager', function () {
       });
     });
 
-    it('writeLog - 必须是一个函数', function () {
+    it('logRecorder - 必须是一个LogRecorder', function () {
       assert.throws(() => {
-        m.setOption('writeLog', 'test');
+        m.setOption('logRecorder', 'test');
       });
-      m.setOption('writeLog', function () {});
+      m.setOption('logRecorder', new StreamRecorder({ write() {} }));
     });
 
   });
 
   describe('getOption(name)', function () {
 
-    function writeLog() {}
-    const m = new Manager({ writeLog });
+    const logRecorder = new StreamRecorder({ write(){} });
+    const m = new Manager({ logRecorder });
 
     it('成功', function () {
-      assert.equal(m.getOption('writeLog'), writeLog);
+      assert.equal(m.getOption('logRecorder'), logRecorder);
     });
 
     it('更新option再获取成功', function () {
-      function writeLog2() { return 2; }
-      m.setOption('writeLog', writeLog2);
-      assert.equal(m.getOption('writeLog'), writeLog2);
+      const logRecorder2 = new StreamRecorder({ write(){} });
+      m.setOption('logRecorder', logRecorder2);
+      assert.equal(m.getOption('logRecorder'), logRecorder2);
     });
 
   });
 
   describe('newContext(options)', function () {
 
-    function writeLog() {}
-    const m = new Manager({ writeLog });
+    const logRecorder = new StreamRecorder({ write(){} });
+    const m = new Manager({ logRecorder });
 
-    it('传递 writeLog', function () {
+    it('传递 logRecorder', function () {
       const ctx = m.newContext();
-      assert.equal(ctx._writeLog, writeLog);
+      assert.equal(ctx._logRecorder, logRecorder);
     });
 
     it('传递自定义的 params', function () {

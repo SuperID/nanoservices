@@ -7,13 +7,13 @@ const globalManager = microservices.globalManager;
 const register = microservices.register;
 const utils = microservices.utils;
 
-const logStream = fs.createWriteStream(path.resolve(__dirname, `call-${ utils.date('Y-m-d') }.log`), {
+const stream = fs.createWriteStream(path.resolve(__dirname, `call-${ utils.date('Y-m-d') }.log`), {
   flags: 'a',
 });
-globalManager.setOption('writeLog', str => {
-  logStream.write(str + '\n');
-});
+globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, '\n'));
 
+// console.debug = console.log;
+// globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console));
 
 function asyncOperate(fn) {
   setTimeout(fn, Math.random() * 50);
