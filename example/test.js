@@ -10,10 +10,15 @@ const utils = microservices.utils;
 const stream = fs.createWriteStream(path.resolve(__dirname, `call-${ utils.date('Y-m-d') }.log`), {
   flags: 'a',
 });
-globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, '\n'));
+globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, {
+  newLine: '\n',
+  format: '$time\t$pid\t$type\t$id\t$content',
+}));
 
-// console.debug = console.log;
-// globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console));
+console.debug = console.log;
+globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console, {
+  format: '$date $time\t$pid\t$type\t$id\t$content',
+}));
 
 function asyncOperate(fn) {
   setTimeout(fn, Math.random() * 50);
