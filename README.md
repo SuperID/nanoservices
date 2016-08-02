@@ -46,7 +46,7 @@ $ npm install super-microservices --save
 ```javascript
 'use strict';
 
-const {Manager} = require('super-microservices');
+const { Manager } = require('super-microservices');
 
 // 创建管理器
 const services = new Manager();
@@ -73,7 +73,7 @@ services.register('add', function (ctx) {
 
 
 // 调用服务
-services.call('add', {a: 123, b: 456}, (err, ret) => {
+services.call('add', { a: 123, b: 456 }, (err, ret) => {
   if (err) {
     console.error(err);
   } else {
@@ -151,12 +151,12 @@ const ctx = services.newContext();
 // const ctx = services.newContext(requestId);
 
 // 调用服务
-ctx.call('add', {a: 1, b: 2}, (err, ret) => {
+ctx.call('add', { a: 1, b: 2 }, (err, ret) => {
   if (err) return console.error(err);
   console.log(ret);
 
   // 调用第二个服务
-  ctx.call('devide', {a: 123, b: 456}, (err, ret) => {
+  ctx.call('devide', { a: 123, b: 456 }, (err, ret) => {
     if (err) return console.error(err);
     console.log(ret);
 
@@ -173,7 +173,7 @@ ctx.call('add', {a: 1, b: 2}, (err, ret) => {
 ctx.series([
 
   // 第一个服务必须手动绑定调用参数，因为它没有上一个服务调用结果可用
-  ctx.prepareCall('add', {a: 123, b: 456}),
+  ctx.prepareCall('add', { a: 123, b: 456 }),
 
   ctx.prepareCall('divide'),
   ctx.prepareCall('times'),
@@ -187,6 +187,65 @@ ctx.series([
 });
 ```
 
+
+## 日志
+
+默认情况下，服务调用产生以及服务执行期间所产生的日志调试信息是不会被记录的。可以在初始化`Manager`时可以传入一个`logRecorder`参数，
+以便将这些日志信息记录到指定的位置。目前支持`stream`和`logger`两种方式。
+
+1、`stream`方式如下：
+
+```javascript
+const { Manager, StreamRecorder } = require('super-microservices');
+
+// 将日志记录到标准输出接口
+const stream = process.stdout;
+
+// 创建LogRecorder
+const logRecorder: new StreamRecorder(stream, {
+  newLine: '\n',
+  format: '$date $time $type $id $content',
+});
+
+// 创建Manager
+const services = new Manager({ logRecorder });
+```
+
+在创建`StreamRecorder`时，第一个参数`stream`为一个标准的`Writable Stream`，可以通过`fs.writeWriteStream()`或`TCP`网络的可写流；
+第二个参数为一些选项，比如：
+
++ `newLine`表示换行符，即每条日志都会自动在末尾加上这个换行符，如果不指定则表示不加换行符
++ `format`表示日志格式，其中有以下变量可选：
+  + `$id` - 当前`requestId`
+  + `$date` - 日期，如`20160802`
+  + `$time` - 时间，如`14:01:37`
+  + `$type` - 日志类型，目前有以下几个：`debug, log, error, call, result`
+  + `$content` - 内容字符串
+  + `$pid` - 当前进程PID
+
+2、`logger`方式如下：
+
+```javascript
+const { Manager, LoggerRecorder } = require('super-microservices');
+
+// 一个日志记录器
+const logger = console;
+// 由于console没有debug方法，需要模拟一个
+logger.debug = console.log;
+
+// 创建LogRecorder
+const logRecorder: new LoggerRecorder(logger, {
+  format: '$date $time $type $id $content',
+});
+
+// 创建Manager
+const services = new Manager({ logRecorder });
+```
+
+在创建`LoggerRecorder`时，第一个参数`logger`为一个包含了`info, log, debug, error`这四个方法的日志记录器；
+第二个参数为一些选项，比如`format`，其使用方法与上文的`StreamRecorder`相同，但默认值与前者不同。
+
+通过记录服务调用日志等信息，再结合相应的日志分析系统即可实现调试跟踪等功能。
 
 
 ## License
