@@ -7,6 +7,7 @@ const globalManager = microservices.globalManager;
 const register = microservices.register;
 const utils = microservices.utils;
 
+// 记录到文件
 const stream = fs.createWriteStream(path.resolve(__dirname, `call-${ utils.date('Y-m-d') }.log`), {
   flags: 'a',
 });
@@ -15,10 +16,17 @@ globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, 
   format: '$time\t$pid\t$type\t$id\t$content',
 }));
 
+// 直接打印到控制台
 console.debug = console.log;
 globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console, {
   format: '$date $time\t$pid\t$type\t$id\t$content',
 }));
+
+// 打印到控制台，且是JSON格式
+// console.debug = console.log;
+// globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console, {
+//   format: '{"date":"$date","time":"$time","id":"$id","pid":"$pid","type":"$type","content":$content}',
+// }));
 
 function asyncOperate(fn) {
   setTimeout(fn, Math.random() * 50);
