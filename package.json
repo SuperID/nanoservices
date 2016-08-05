@@ -1,6 +1,6 @@
 {
   "name": "super-microservices",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "基于Node.js的微服务框架",
   "main": "index.js",
   "scripts": {
