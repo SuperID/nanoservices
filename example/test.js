@@ -19,7 +19,7 @@ const stream = fs.createWriteStream(logFileName, {
 // eslint-disable-next-line
 const jsonFormat = '{"date":"$date","time":"$time","id":"$id","pid":"$pid","type":"$type","content":$content}';
 // eslint-disable-next-line
-const textFormat = '$datetime\t$timestamp\t$pid\t$type\t$id\t$content';
+const textFormat = '$datetime\t$timestamp\t$hostname\t$pid\t$type\t$id\t$content';
 
 // 记录到文件
 globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, {

@@ -225,6 +225,7 @@ const services = new Manager({ logRecorder });
   + `$type` - 日志类型，目前有以下几个：`debug, log, error, call, result`
   + `$content` - 内容字符串
   + `$pid` - 当前进程PID
+  + `$hostname` - 当前主机名
 
 2、`logger`方式如下：
 
