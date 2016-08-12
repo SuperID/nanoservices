@@ -220,6 +220,7 @@ const services = new Manager({ logRecorder });
   + `$date` - 日期，如`2016/08/02`
   + `$time` - 时间，如`14:01:37`
   + `$datetime` - 日期时间，如`2016/08/02 14:01:37`
+  + `isotime` - ISO格式的时间字符串，如`2016-08-12T13:20:27.599Z`
   + `$timestamp` - 毫秒级的Unix时间戳，如`1470980387892`
   + `$timestamps` - 秒级的Unix时间戳，如`1470980387`
   + `$type` - 日志类型，目前有以下几个：`debug, log, error, call, result`
