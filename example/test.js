@@ -8,7 +8,7 @@ const globalManager = microservices.globalManager;
 const register = microservices.register;
 const utils = microservices.utils;
 
-// 记录到文件
+// 创建文件流
 const logFileName = path.resolve(__dirname, `logs/${ utils.date('Ymd') }/${ utils.date('Ymd-Hi') }.log`);
 mkdirp.sync(path.dirname(logFileName));
 const stream = fs.createWriteStream(logFileName, {
@@ -19,18 +19,19 @@ const stream = fs.createWriteStream(logFileName, {
 // eslint-disable-next-line
 const jsonFormat = '{"date":"$date","time":"$time","id":"$id","pid":"$pid","type":"$type","content":$content}';
 // eslint-disable-next-line
-const textFormat = '$time\t$pid\t$type\t$id\t$content';
+const textFormat = '$datetime\t$timestamp\t$pid\t$type\t$id\t$content';
 
+// 记录到文件
 globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, {
   newLine: '\n',
   format: jsonFormat,
 }));
 
 // 直接打印到控制台
-// console.debug = console.log;
-// globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console, {
-//   format: '$date $time\t$pid\t$type\t$id\t$content',
-// }));
+console.debug = console.log;
+globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console, {
+  format: textFormat,
+}));
 
 // 打印到控制台，且是JSON格式
 // console.debug = console.log;
