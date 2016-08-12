@@ -14,9 +14,16 @@ mkdirp.sync(path.dirname(logFileName));
 const stream = fs.createWriteStream(logFileName, {
   flags: 'a',
 });
+
+// 日志格式
+// eslint-disable-next-line
+const jsonFormat = '{"date":"$date","time":"$time","id":"$id","pid":"$pid","type":"$type","content":$content}';
+// eslint-disable-next-line
+const textFormat = '$time\t$pid\t$type\t$id\t$content';
+
 globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, {
   newLine: '\n',
-  format: '$time\t$pid\t$type\t$id\t$content',
+  format: jsonFormat,
 }));
 
 // 直接打印到控制台
@@ -28,7 +35,7 @@ globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, 
 // 打印到控制台，且是JSON格式
 // console.debug = console.log;
 // globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console, {
-//   format: '{"date":"$date","time":"$time","id":"$id","pid":"$pid","type":"$type","content":$content}',
+//   format: jsonFormat,
 // }));
 
 function asyncOperate(fn) {
