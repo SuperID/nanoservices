@@ -17,7 +17,7 @@ const stream = fs.createWriteStream(logFileName, {
 
 // 日志格式
 // eslint-disable-next-line
-const jsonFormat = '{"id":"$id","pid":"$pid","type":"$type","content":$content}';
+const jsonFormat = '{"t":$timestamp,"id":"$id","pid":"$pid","type":"$type","content":$content}';
 // eslint-disable-next-line
 const textFormat = '$datetime\t$timestamp\t$hostname\t$pid\t$type\t$id\t$content';
 
