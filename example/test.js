@@ -17,7 +17,7 @@ const stream = fs.createWriteStream(logFileName, {
 
 // 日志格式
 // eslint-disable-next-line
-const jsonFormat = '{"date":"$date","time":"$time","id":"$id","pid":"$pid","type":"$type","content":$content}';
+const jsonFormat = '{"id":"$id","pid":"$pid","type":"$type","content":$content}';
 // eslint-disable-next-line
 const textFormat = '$datetime\t$timestamp\t$hostname\t$pid\t$type\t$id\t$content';
 
@@ -28,10 +28,10 @@ globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, 
 }));
 
 // 直接打印到控制台
-console.debug = console.log;
-globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console, {
-  format: textFormat,
-}));
+// console.debug = console.log;
+// globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console, {
+//   format: textFormat,
+// }));
 
 // 打印到控制台，且是JSON格式
 // console.debug = console.log;

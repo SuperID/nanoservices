@@ -1,7 +1,12 @@
 'use strict';
 
 register('logstash', function () {
-  let f = fs.readFileSync(path.resolve(__dirname, 'logstash.conf')).toString();
-  f = f.replace(/\$dir/g, __dirname);
-  exec(`logstash -e '${ f }'`);
+  const f = path.resolve(__dirname, 'logstash.conf');
+  let c = fs.readFileSync(f).toString().trim();
+  c = c.replace(/\$dir/g, __dirname);
+  exec(`logstash -e '${ c }'`);
+});
+
+register('test', function () {
+  exec(`node test`);
 });
