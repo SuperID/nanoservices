@@ -3,12 +3,15 @@
 const fs = require('fs');
 const path = require('path');
 const microservices = require('../');
+const mkdirp = require('mkdirp');
 const globalManager = microservices.globalManager;
 const register = microservices.register;
 const utils = microservices.utils;
 
 // 记录到文件
-const stream = fs.createWriteStream(path.resolve(__dirname, `call-${ utils.date('Y-m-d') }.log`), {
+const logFileName = path.resolve(__dirname, `logs/${ utils.date('Ymd') }/${ utils.date('Ymd-Hi') }.log`);
+mkdirp.sync(path.dirname(logFileName));
+const stream = fs.createWriteStream(logFileName, {
   flags: 'a',
 });
 globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, {
@@ -17,10 +20,10 @@ globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, 
 }));
 
 // 直接打印到控制台
-console.debug = console.log;
-globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console, {
-  format: '$date $time\t$pid\t$type\t$id\t$content',
-}));
+// console.debug = console.log;
+// globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console, {
+//   format: '$date $time\t$pid\t$type\t$id\t$content',
+// }));
 
 // 打印到控制台，且是JSON格式
 // console.debug = console.log;
