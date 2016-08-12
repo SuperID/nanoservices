@@ -40,7 +40,7 @@ globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, 
 // }));
 
 function asyncOperate(fn) {
-  setTimeout(fn, Math.random() * 50);
+  setTimeout(fn, Math.random() * 500);
 }
 
 function randomBoolean() {
@@ -134,12 +134,12 @@ register('face.upload', function (ctx) {
 });
 
 
-const ctx = globalManager.newContext();
 setInterval(() => {
+  const ctx = globalManager.newContext();
   ctx.call('api.superid.signup', { phone: 123456, face: utils.randomString(20) + '.jpg' })
     .then(ret => console.log('ok', ret))
     .catch(err => console.log('fail', err));
   ctx.call('api.superid.signup', { phone: 123456, face: utils.randomString(20) + '.jpg' })
     .then(ret => console.log('ok', ret))
     .catch(err => console.log('fail', err));
-}, 1000);
+}, 10000);
