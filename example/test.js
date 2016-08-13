@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const microservices = require('../');
 const mkdirp = require('mkdirp');
+const clc = require('cli-color');
 const globalManager = microservices.globalManager;
 const register = microservices.register;
 const utils = microservices.utils;
@@ -15,9 +16,28 @@ const stream = fs.createWriteStream(logFileName, {
   flags: 'a',
 });
 
+// 创建日志记录器
+const logger = {
+  write(str) {
+    process.stdout.write(str + '\n');
+  },
+  log(str) {
+    this.write('LOG:\t' + clc.bold(str));
+  },
+  info(str) {
+    this.write('INFO:\t' + clc.blue(str));
+  },
+  debug(str) {
+    this.write('DEBUG:\t' + clc.green(str));
+  },
+  error(str) {
+    this.write('ERROR:\t' + clc.red(str));
+  },
+};
+
 // 日志格式
 // eslint-disable-next-line
-const jsonFormat = '{"t":$timestamp,"id":"$id","pid":"$pid","type":"$type","content":$content}';
+const jsonFormat = '{"time":$isotime,"id":"$id","type":"$type","content":$content}';
 // eslint-disable-next-line
 const textFormat = '$datetime\t$timestamp\t$hostname\t$pid\t$type\t$id\t$content';
 
@@ -28,16 +48,14 @@ globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, 
 }));
 
 // 直接打印到控制台
-// console.debug = console.log;
-// globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console, {
+// globalManager.setOption('logRecorder', new microservices.LoggerRecorder(logger, {
 //   format: textFormat,
 // }));
 
 // 打印到控制台，且是JSON格式
-// console.debug = console.log;
-// globalManager.setOption('logRecorder', new microservices.LoggerRecorder(console, {
-//   format: jsonFormat,
-// }));
+globalManager.setOption('logRecorder', new microservices.LoggerRecorder(logger, {
+  format: jsonFormat,
+}));
 
 function asyncOperate(fn) {
   setTimeout(fn, Math.random() * 500);
@@ -134,7 +152,7 @@ register('face.upload', function (ctx) {
 });
 
 
-setInterval(() => {
+function run() {
   const ctx = globalManager.newContext();
   ctx.call('api.superid.signup', { phone: 123456, face: utils.randomString(20) + '.jpg' })
     .then(ret => console.log('ok', ret))
@@ -142,4 +160,6 @@ setInterval(() => {
   ctx.call('api.superid.signup', { phone: 123456, face: utils.randomString(20) + '.jpg' })
     .then(ret => console.log('ok', ret))
     .catch(err => console.log('fail', err));
-}, 10000);
+}
+setInterval(run, 10000);
+run();
