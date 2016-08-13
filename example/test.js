@@ -39,7 +39,9 @@ const logger = {
 // eslint-disable-next-line
 const jsonFormat = '{"time":$isotime,"id":"$id","type":"$type","content":$content}';
 // eslint-disable-next-line
-const textFormat = '$datetime\t$timestamp\t$hostname\t$pid\t$type\t$id\t$content';
+const textFormat = '$isotime\t$type\t$id\t$service\t$uptime\t$content';
+
+// -----------------------------------------------------------------------------
 
 // 记录到文件
 globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, {
@@ -48,14 +50,16 @@ globalManager.setOption('logRecorder', new microservices.StreamRecorder(stream, 
 }));
 
 // 直接打印到控制台
-// globalManager.setOption('logRecorder', new microservices.LoggerRecorder(logger, {
-//   format: textFormat,
-// }));
+globalManager.setOption('logRecorder', new microservices.LoggerRecorder(logger, {
+  format: textFormat,
+}));
 
 // 打印到控制台，且是JSON格式
-globalManager.setOption('logRecorder', new microservices.LoggerRecorder(logger, {
-  format: jsonFormat,
-}));
+// globalManager.setOption('logRecorder', new microservices.LoggerRecorder(logger, {
+//   format: jsonFormat,
+// }));
+
+// -----------------------------------------------------------------------------
 
 function asyncOperate(fn) {
   setTimeout(fn, Math.random() * 500);
@@ -65,6 +69,7 @@ function randomBoolean() {
   return Math.random() >= 0.5;
 }
 
+// -----------------------------------------------------------------------------
 
 // 注册新用户
 register('api.superid.signup', function (ctx) {
@@ -151,6 +156,7 @@ register('face.upload', function (ctx) {
   });
 });
 
+// -----------------------------------------------------------------------------
 
 function run() {
   const ctx = globalManager.newContext();

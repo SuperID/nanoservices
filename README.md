@@ -217,6 +217,8 @@ const services = new Manager({ logRecorder });
 + `newLine`表示换行符，即每条日志都会自动在末尾加上这个换行符，如果不指定则表示不加换行符
 + `format`表示日志格式，其中有以下变量可选：
   + `$id` - 当前`requestId`
+  + `$service` - 当前服务名称，如果没有则为`null`
+  + `$uptime` - 当前`context`已启动的时间（毫秒）
   + `$date` - 日期，如`2016/08/02`
   + `$time` - 时间，如`14:01:37`
   + `$datetime` - 日期时间，如`2016/08/02 14:01:37`
