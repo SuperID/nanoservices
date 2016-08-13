@@ -37,7 +37,7 @@ const logger = {
 
 // 日志格式
 // eslint-disable-next-line
-const jsonFormat = '{"time":$isotime,"id":"$id","type":"$type","content":$content}';
+const jsonFormat = '{"time":$isotime,"id":"$id","type":"$type","service":"$service","uptime":$uptime,"content":$content}';
 // eslint-disable-next-line
 const textFormat = '$isotime\t$type\t$id\t$service\t$uptime\t$content';
 
@@ -149,10 +149,10 @@ register('face.compare', function (ctx) {
   });
 });
 register('face.upload', function (ctx) {
+  const uuid = utils.randomString(20);
+  ctx.log('upload image, uuid=%s', uuid);
   asyncOperate(() => {
-    ctx.result({
-      uuid: utils.randomString(20),
-    });
+    ctx.result({ uuid });
   });
 });
 
