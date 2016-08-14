@@ -252,6 +252,9 @@ const services = new Manager({ logRecorder });
 在创建`LoggerRecorder`时，第一个参数`logger`为一个包含了`info, log, debug, error`这四个方法的日志记录器；
 第二个参数为一些选项，比如`format`，其使用方法与上文的`StreamRecorder`相同，但默认值与前者不同。
 
+`ctx.log()`会使用`logger.log()`来记录，`ctx.debug()`使用`logger.debug()`，
+`ctx.error()`使用`logger.error()`，其他的均使用`logger.info()`来记录。
+
 通过记录服务调用日志等信息，再结合相应的日志分析系统即可实现调试跟踪等功能。
 
 
