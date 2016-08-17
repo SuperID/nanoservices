@@ -5,27 +5,27 @@
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
 
-[npm-image]: https://img.shields.io/npm/v/super-microservices.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/super-microservices
-[travis-image]: https://img.shields.io/travis/SuperID/super-microservices.svg?style=flat-square
-[travis-url]: https://travis-ci.org/SuperID/super-microservices
-[coveralls-image]: https://img.shields.io/coveralls/SuperID/super-microservices.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/SuperID/super-microservices?branch=master
-[david-image]: https://img.shields.io/david/SuperID/super-microservices.svg?style=flat-square
-[david-url]: https://david-dm.org/SuperID/super-microservices
+[npm-image]: https://img.shields.io/npm/v/manoservices.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/manoservices
+[travis-image]: https://img.shields.io/travis/SuperID/manoservices.svg?style=flat-square
+[travis-url]: https://travis-ci.org/SuperID/manoservices
+[coveralls-image]: https://img.shields.io/coveralls/SuperID/manoservices.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/SuperID/manoservices?branch=master
+[david-image]: https://img.shields.io/david/SuperID/manoservices.svg?style=flat-square
+[david-url]: https://david-dm.org/SuperID/manoservices
 [node-image]: https://img.shields.io/badge/node.js-%3E=_4.0-green.svg?style=flat-square
 [node-url]: http://nodejs.org/download/
-[download-image]: https://img.shields.io/npm/dm/super-microservices.svg?style=flat-square
-[download-url]: https://npmjs.org/package/super-microservices
+[download-image]: https://img.shields.io/npm/dm/manoservices.svg?style=flat-square
+[download-url]: https://npmjs.org/package/manoservices
 
 
-# super-microservices
-基于Node.js的微服务框架
+# manoservices
+比微服务更小的纳米服务框架
 
 ## 安装
 
 ```bash
-$ npm install super-microservices --save
+$ npm install manoservices --save
 ```
 
 **要求 Node.js v4.0.0 或更高版本**
@@ -46,7 +46,7 @@ $ npm install super-microservices --save
 ```javascript
 'use strict';
 
-const { Manager } = require('super-microservices');
+const { Manager } = require('manoservices');
 
 // 创建管理器
 const services = new Manager();
@@ -202,7 +202,7 @@ ctx.series([
 1、`stream`方式如下：
 
 ```javascript
-const { Manager, StreamRecorder } = require('super-microservices');
+const { Manager, StreamRecorder } = require('manoservices');
 
 // 将日志记录到标准输出接口
 const stream = process.stdout;
@@ -239,7 +239,7 @@ const services = new Manager({ logRecorder });
 2、`logger`方式如下：
 
 ```javascript
-const { Manager, LoggerRecorder } = require('super-microservices');
+const { Manager, LoggerRecorder } = require('manoservices');
 
 // 一个日志记录器
 const logger = console;
