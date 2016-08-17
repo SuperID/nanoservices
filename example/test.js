@@ -124,7 +124,7 @@ register('user.getOrCreate', function (ctx) {
     if (err) return ctx.error(err);
     if (user) return ctx.result(user);
     ctx.debug('ok, let me create a new user');
-    ctx.next('user.create', ctx.params);
+    ctx.transfer('user.create', ctx.params);
   });
 });
 register('user.generateNewAccessToken', function (ctx) {

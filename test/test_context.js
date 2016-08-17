@@ -127,11 +127,11 @@ describe('Context', function () {
 
   });
 
-  describe('next(name, params)', function () {
+  describe('transfer(name, params)', function () {
 
     const manager = new Manager();
     manager.register('bridge', function (ctx) {
-      ctx.next(ctx.params.name, { msg: ctx.params.msg });
+      ctx.transfer(ctx.params.name, { msg: ctx.params.msg });
     });
     manager.register('testSuccess', function (ctx) {
       setTimeout(() => {
@@ -209,5 +209,62 @@ describe('Context', function () {
 
   });
 
+  describe('series(list, callback)', function () {
+
+    const manager = new Manager();
+    manager.register('test1', function (ctx) {
+      setTimeout(() => {
+        ctx.result({ value: ctx.params.value + 1 });
+      }, Math.random() * 10);
+    });
+    manager.register('test2', function (ctx) {
+      setTimeout(() => {
+        ctx.result({ value: ctx.params.value + 10 });
+      }, Math.random() * 10);
+    });
+    manager.register('transfer', function (ctx) {
+      ctx.transferSeries([
+        ctx.prepareCall('test1', ctx.params),
+        ctx.prepareCall('test2'),
+        ctx.prepareCall('test1'),
+      ]);
+    });
+
+    it('callback', function (done) {
+      const ctx = new Context({ manager });
+      ctx.series([
+        ctx.prepareCall('test1', { value: 123 }),
+        ctx.prepareCall('test2'),
+        ctx.prepareCall('test1'),
+      ], (err, ret) => {
+        assert.equal(err, null);
+        assert.deepEqual(ret, { value: 135 });
+        done();
+      });
+    });
+
+    it('promise', function (done) {
+      const ctx = new Context({ manager });
+      ctx.series([
+        ctx.prepareCall('test1', { value: 123 }),
+        ctx.prepareCall('test2'),
+        ctx.prepareCall('test1'),
+      ]).then(ret => {
+        assert.deepEqual(ret, { value: 135 });
+        done();
+      }).catch(err => {
+        done(err);
+      });
+    });
+
+    it('transfer', function (done) {
+      new Context({ manager }).call('transfer', { value: 110 }, (err, ret) => {
+        assert.equal(err, null);
+        assert.deepEqual(ret, { value: 122 });
+        done();
+      });
+    });
+
+  });
 
 });

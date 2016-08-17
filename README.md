@@ -116,14 +116,20 @@ interface Context {
   // 打印调试信息，支持 debug('msg=%s', msg) 这样的格式
   debug(msg: any);
 
-  // 调用其他服务，并传递 requestId
+  // 调用其他服务
+  // 如果没有传递 callback 参数则返回 Promise
   call(name: string, params: Object, callback: (err, ret) => void): Promise;
 
-  // 调用服务器，并传递 requestId，该调用的结果作为当前服务的执行结果返回
-  next(name: string, params: Object);
+  // 顺序调用一系列的服务，上一个调用的结果作为下一个调用的参数，如果中途出错则直接返回
+  // 如果没有传递 callback 参数则返回 Promise
+  series(calls: [CallService], callback: (err, ret) => void): Promise;
+
+  // 调用服务器，该调用的结果作为当前服务的执行结果返回
+  transfer(name: string, params: Object);
 
   // 顺序调用一系列的服务，上一个调用的结果作为下一个调用的参数，如果中途出错则直接返回
-  series(calls: [CallService], callback: (err, ret) => void): Promise;
+  // 最后一个调用的结果将作为当前服务的执行结果返回
+  transferSeries(calls: [CallService], callback: (err, ret) => void);
 
   // 返回一个 CallService 对象，与 series() 结合使用
   // params 表示绑定的参数，如果补指定，则使用上一个调用的结果
