@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run lint && mocha -t 10000",
-    "test-cov": "istanbul cover _mocha --report lcovonly -- -t 10000 -R spec && cat ./coverage/lcov.info | coveralls",
+    "test-cov": "istanbul cover _mocha --report lcovonly -- -t 10000 -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "lint": "eslint lib test example/*.js --fix && echo 'eslint passed'",
     "prepublish": "npm test"
   },
