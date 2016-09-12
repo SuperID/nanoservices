@@ -3,6 +3,10 @@
   "version": "0.0.8",
   "description": "比微服务更小的纳米服务框架",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "lib"
+  ],
   "scripts": {
     "test": "npm run lint && mocha -t 10000",
     "test-cov": "istanbul cover _mocha --report lcovonly -- -t 10000 -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
