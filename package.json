@@ -1,5 +1,5 @@
 {
-  "name": "manoservices",
+  "name": "nanoservices",
   "version": "0.0.8",
   "description": "比微服务更小的纳米服务框架",
   "main": "index.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SuperID/manoservices.git"
+    "url": "git+https://github.com/SuperID/nanoservices.git"
   },
   "keywords": [
     "microservices"
@@ -19,9 +19,9 @@
   "author": "Zongmin Lei <leizongmin@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SuperID/manoservices/issues"
+    "url": "https://github.com/SuperID/nanoservices/issues"
   },
-  "homepage": "https://github.com/SuperID/manoservices#readme",
+  "homepage": "https://github.com/SuperID/nanoservices#readme",
   "dependencies": {
     "bluebird": "^3.4.1",
     "lei-utils": "^2.1.0",
