@@ -28,7 +28,7 @@
   "homepage": "https://github.com/SuperID/nanoservices#readme",
   "dependencies": {
     "bluebird": "^3.4.1",
-    "lei-utils": "^2.1.0",
+    "lei-utils": "^3.0.0",
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
