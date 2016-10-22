@@ -34,7 +34,7 @@ describe('Service', function () {
     it('在 service 内出错被捕捉到', function (done) {
       const manager = new Manager();
       manager.register('test', function (ctx) {
-        return new Promise((_resolve, _reject) => {
+        return new Promise((resolve, reject) => {
           if (Date.now() > 0) {
             throw new Error('test');
           }
