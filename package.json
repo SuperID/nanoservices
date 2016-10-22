@@ -1,6 +1,6 @@
 {
   "name": "nanoservices",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "比微服务更小的纳米服务框架",
   "main": "index.js",
   "files": [
