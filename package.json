@@ -1,6 +1,6 @@
 {
   "name": "nanoservices",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "比微服务更小的纳米服务框架",
   "main": "index.js",
   "files": [
@@ -28,7 +28,7 @@
   "homepage": "https://github.com/SuperID/nanoservices#readme",
   "dependencies": {
     "bluebird": "^3.4.1",
-    "lei-utils": "^2.1.0",
+    "lei-utils": "^3.0.0",
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
@@ -37,6 +37,6 @@
     "eslint-config-lei": "^0.0.12",
     "eslint-plugin-promise": "^3.3.0",
     "istanbul": "^0.4.4",
-    "mocha": "^3.0.2"
+    "mocha": "^3.1.2"
   }
 }
