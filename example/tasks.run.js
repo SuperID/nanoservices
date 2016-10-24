@@ -1,5 +1,7 @@
 'use strict';
 
+/* global register, path, fs, exec */
+
 register('logstash', function () {
   const f = path.resolve(__dirname, 'logstash.conf');
   let c = fs.readFileSync(f).toString().trim();
