@@ -44,6 +44,8 @@ $ npm install nanoservices --save
 
 ## 使用方法
 
+### callback 接口
+
 ```javascript
 'use strict';
 
@@ -81,6 +83,55 @@ services.call('add', { a: 123, b: 456 }, (err, ret) => {
     console.log('result=%s', ret);
   }
 });
+
+// 支持 Promise
+services.call('add', { a: 123, b: 456 })
+  .then(ret => {
+    console.log('result=%s', ret);
+  })
+  .catch(err => {
+    console.error(err);
+  });
+```
+
+### promise 接口
+
+```javascript
+'use strict';
+
+const { Manager } = require('nanoservices');
+
+// 创建管理器
+const services = new Manager();
+
+
+// 注册服务
+services.register('add', async function (ctx) {
+
+  if (isNaN(ctx.params.a)) return ctx.error('参数a不是一个数值');
+  if (isNaN(ctx.params.b)) return ctx.error('参数a不是一个数值');
+
+  ctx.debug('add: a=%s, b=%s', ctx.params.a, ctx.params.b);
+
+  const a = Number(ctx.params.a);
+  const b = Number(ctx.params.b);
+
+  // 使用 await
+  await services.call('service1', { a });
+  await services.call('service1', { b });
+
+  // 返回结果
+  ctx.result(a + b);
+});
+
+// 调用服务
+services.call('add', { a: 123, b: 456 })
+  .then(ret => {
+    console.log('result=%s', ret);
+  })
+  .catch(err => {
+    console.error(err);
+  });
 ```
 
 
