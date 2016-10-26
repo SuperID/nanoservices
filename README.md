@@ -4,6 +4,7 @@
 [![David deps][david-image]][david-url]
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
+[![npm license][license-image]][download-url]
 
 [npm-image]: https://img.shields.io/npm/v/nanoservices.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/nanoservices
@@ -17,7 +18,7 @@
 [node-url]: http://nodejs.org/download/
 [download-image]: https://img.shields.io/npm/dm/nanoservices.svg?style=flat-square
 [download-url]: https://npmjs.org/package/nanoservices
-
+[license-image]: https://img.shields.io/npm/l/nanoservices.svg
 
 # nanoservices
 比微服务更小的纳米服务框架
