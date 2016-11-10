@@ -34,7 +34,7 @@
   "devDependencies": {
     "coveralls": "^2.11.11",
     "eslint": "^3.8.1",
-    "eslint-config-lei": "^0.0.14",
+    "eslint-config-lei": "^0.0.15",
     "eslint-plugin-promise": "^3.3.0",
     "istanbul": "^0.4.4",
     "lei-coroutine": "^1.2.3",
